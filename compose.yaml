@@ -1,0 +1,18 @@
+version: '3.9'
+name: csv-parser
+services:
+  db:
+    image: postgres:16.3-alpine3.20
+    container_name: db
+    restart: no
+    environment:
+      POSTGRES_USER: alien
+      POSTGRES_PASSWORD: rootroot
+      POSTGRES_DB: csv_data
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+volumes:
+  db_data:
+    name: csv-parser-db-data
