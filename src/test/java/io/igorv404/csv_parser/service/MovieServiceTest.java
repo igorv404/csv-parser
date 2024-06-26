@@ -51,7 +51,7 @@ class MovieServiceTest {
 
   @Test
   public void shouldReturnMovieWithId2() {
-    Integer id = 2;
+    final Integer id = 2;
     when(this.movieRepository.findById(id)).thenReturn(Optional.of(this.entity2));
     Movie responseData = this.movieService.getEntity(id);
     assertNotNull(responseData);
@@ -61,7 +61,7 @@ class MovieServiceTest {
 
   @Test
   public void shouldThrowEntityNotFoundExceptionWhenCallMovieWithId0() {
-    Integer id = 0;
+    final Integer id = 0;
     when(this.movieRepository.findById(id)).thenReturn(Optional.empty());
     assertThrows(EntityNotFoundException.class, () -> this.movieService.getEntity(id));
     verify(this.movieRepository, times(1)).findById(id);
@@ -79,7 +79,7 @@ class MovieServiceTest {
 
   @Test
   public void shouldUpdateMovie() {
-    Integer id = 1;
+    final Integer id = 1;
     final Movie updatedEntity = new Movie(1, "New movie 1", "Description", 80, 4, 2004, "2h 50m", "13", 8.9f, "(2.9M)");
     when(this.movieRepository.findById(id)).thenReturn(Optional.of(this.entity1));
     when(this.movieRepository.save(any(Movie.class))).thenReturn(updatedEntity);
@@ -93,7 +93,7 @@ class MovieServiceTest {
 
   @Test
   public void shouldThrowEntityNotFoundExceptionWhenTryToUpdateMovieWithAbsentId() {
-    Integer id = 0;
+    final Integer id = 0;
     final Movie badEntity = new Movie(0, "Bad movie", "Description", 0, 1000, 1999, "2h 50m", "16", 0.0f, "(2M)");
     when(this.movieRepository.findById(id)).thenReturn(Optional.empty());
     assertThrows(EntityNotFoundException.class, () -> this.movieService.updateEntity(badEntity));
@@ -103,7 +103,7 @@ class MovieServiceTest {
 
   @Test
   public void shouldDeleteMovie() {
-    Integer id = 1;
+    final Integer id = 1;
     when(this.movieRepository.findById(id)).thenReturn(Optional.of(this.entity1));
     String responseMessage = this.movieService.deleteEntity(id);
     assertNotNull(responseMessage);
@@ -114,7 +114,7 @@ class MovieServiceTest {
 
   @Test
   public void shouldThrowEntityNotFoundExceptionWhenTryToDeleteMovieWithAbsentId() {
-    Integer id = 0;
+    final Integer id = 0;
     when(this.movieRepository.findById(id)).thenReturn(Optional.empty());
     assertThrows(EntityNotFoundException.class, () -> this.movieService.deleteEntity(id));
     verify(this.movieRepository, times(1)).findById(id);
