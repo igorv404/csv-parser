@@ -24,7 +24,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 class CsvServiceTest {
-
   @Mock
   private MovieRepository movieRepository;
 

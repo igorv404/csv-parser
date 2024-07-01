@@ -25,10 +25,10 @@ public class SearchService {
 
   private boolean hasMatch(Movie entity, String query, boolean isNumeric) {
     if (isNumeric) {
-      return String.valueOf(entity.getId()).matches(query) ||
-          String.valueOf(entity.getMetascore()).matches(query) ||
-          String.valueOf(entity.getRank()).matches(query) ||
-          String.valueOf(entity.getYear()).matches(query) ||
+      return String.valueOf(entity.getId()).contains(query) ||
+          String.valueOf(entity.getMetascore()).contains(query) ||
+          String.valueOf(entity.getRank()).contains(query) ||
+          String.valueOf(entity.getYear()).contains(query) ||
           entity.getName().toLowerCase().contains(query) ||
           entity.getDescription().toLowerCase().contains(query) ||
           entity.getDuration().toLowerCase().contains(query) ||

@@ -36,7 +36,18 @@ class SearchServiceTest {
   }
 
   @Test
-  public void shouldReturnOnlyMatchedMovies() {
+  public void shouldReturnOnlyMatchedMoviesWhenQueryIsNumeric() {
+    final String query = "8";
+    when(this.movieRepository.findAll()).thenReturn(data);
+    List<Movie> result = this.searchService.search(query);
+    assertNotEquals(0, result.size());
+    assertEquals(2, result.size());
+    assertEquals(List.of(this.entity1, this.entity2), result);
+    verify(this.movieRepository, times(1)).findAll();
+  }
+
+  @Test
+  public void shouldReturnOnlyMatchedMoviesWhenQueryIsNotNumeric() {
     final String query = "1h";
     when(this.movieRepository.findAll()).thenReturn(data);
     List<Movie> result = this.searchService.search(query);
