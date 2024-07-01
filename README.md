@@ -16,21 +16,7 @@ the [Docker's official website](https://www.docker.com/products/docker-desktop/)
 docker compose up -d
 ```
 
-2. **Build the project:**
-
-For Unix systems:
-
-```bash
-./mvnw clean install
-```
-
-For Windows systems:
-
-```cmd
-mvnw.cmd clean install
-```
-
-3. **Run the project:**
+2. **Run the project:**
 
 For Unix systems:
 
