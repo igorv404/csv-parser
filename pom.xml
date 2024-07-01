@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>io.igorv404</groupId>
 	<artifactId>csv-parser</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>csv-parser</name>
 	<description>CSV parser with data search capability</description>
 	<properties>
