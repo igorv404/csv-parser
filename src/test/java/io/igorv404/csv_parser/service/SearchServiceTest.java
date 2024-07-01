@@ -2,6 +2,7 @@ package io.igorv404.csv_parser.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,6 +10,7 @@ import static org.mockito.Mockito.when;
 import io.igorv404.csv_parser.model.Movie;
 import io.igorv404.csv_parser.repository.MovieRepository;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -30,9 +32,20 @@ class SearchServiceTest {
 
   private final List<Movie> data = List.of(this.entity1, this.entity2, this.entity3);
 
+  private AutoCloseable mocks;
+
   @BeforeEach
   public void setUp() {
-    MockitoAnnotations.openMocks(this);
+    mocks = MockitoAnnotations.openMocks(this);
+  }
+
+  @AfterEach
+  public void tearDown() {
+    try {
+      mocks.close();
+    } catch (Exception e) {
+      fail(e.getMessage());
+    }
   }
 
   @Test

@@ -12,9 +12,9 @@ import io.igorv404.csv_parser.exception.EmptyCsvException;
 import io.igorv404.csv_parser.exception.FileIsNotCsvException;
 import io.igorv404.csv_parser.model.Movie;
 import io.igorv404.csv_parser.repository.MovieRepository;
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -33,37 +33,37 @@ class CsvServiceTest {
   @InjectMocks
   private CsvService csvService;
 
-  private final Movie entity1 = new Movie(1, " The Shawshank Redemption",
-      "Over the course of several years, two convicts form a friendship, seeking consolation and, eventually, redemption through basic compassion.",
-      82, 1, 1994, "2h 22m", "15", 9.3f, "(2.9M)");
+  private final Movie entity1 = new Movie(1, "Movie 1", "Description", 80, 4, 2004, "2h 22m", "15", 8.7f, "(2.9M)");
 
-  private final Movie entity2 = new Movie(2, " The Godfather",
-      "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
-      100, 2, 1972, "2h 55m", "15",
-      9.2f, "(2M)");
+  private final Movie entity2 = new Movie(2, "Movie 2", "Description", 87, 1, 2012, "1h 50m", "12", 9.1f, "(10.3M)");
 
-  private final Movie entity3 = new Movie(3, " The Dark Knight",
-      "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
-      84, 3, 2008, "2h 32m", "12A",
-      9f, "(2.9M)");
+  private final Movie entity3 = new Movie(3, "Movie 3", "Description", 55, 45, 2011, "1h 12m", "7", 6.6f, "(1.2M)");
 
   private final List<Movie> data = List.of(this.entity1, this.entity2, this.entity3);
 
+  private AutoCloseable mocks;
+
   @BeforeEach
   public void setUp() {
-    MockitoAnnotations.openMocks(this);
+    mocks = MockitoAnnotations.openMocks(this);
+  }
+
+  @AfterEach
+  public void tearDown() {
+    try {
+      mocks.close();
+    } catch (Exception e) {
+      fail(e.getMessage());
+    }
   }
 
   @Test
   public void shouldUploadCsvData() {
-    try {
+    try (FileInputStream inputStream = new FileInputStream("src/test/resources/data.csv")) {
       when(this.movieRepository.findAll()).thenReturn(this.data);
       when(this.movieService.getAllEntities()).thenReturn(this.data);
       when(this.movieRepository.saveAll(this.data)).thenReturn(this.data);
-      File csv = new File("src/test/resources/data.csv");
-      FileInputStream inputStream = new FileInputStream(csv);
-      MultipartFile multipartFile = new MockMultipartFile("file", "data.csv", "text/csv",
-          inputStream);
+      MultipartFile multipartFile = new MockMultipartFile("file", "data.csv", "text/csv", inputStream);
       List<Movie> savedData = this.csvService.uploadCsvData(multipartFile);
       assertNotEquals(0, savedData.size());
       assertEquals(3, savedData.size());
@@ -76,9 +76,7 @@ class CsvServiceTest {
 
   @Test
   public void shouldThrowEmptyCsvExceptionWhenCsvFileIsEmpty() {
-    try {
-      File csv = new File("src/test/resources/empty.csv");
-      FileInputStream inputStream = new FileInputStream(csv);
+    try (FileInputStream inputStream = new FileInputStream("src/test/resources/empty.csv")) {
       MultipartFile multipartFile = new MockMultipartFile("file", "empty.csv", "text/csv",
           inputStream);
       assertThrows(EmptyCsvException.class, () -> this.csvService.uploadCsvData(multipartFile));
@@ -90,9 +88,7 @@ class CsvServiceTest {
 
   @Test
   public void shouldThrowFileIsNotCsvExceptionWhenFileIsNotCsv() {
-    try {
-      File csv = new File("src/test/resources/badExtension.txt");
-      FileInputStream inputStream = new FileInputStream(csv);
+    try (FileInputStream inputStream = new FileInputStream("src/test/resources/badExtension.txt")) {
       MultipartFile multipartFile = new MockMultipartFile("file", "badExtension.txt", "text/plain",
           inputStream);
       assertThrows(FileIsNotCsvException.class, () -> this.csvService.uploadCsvData(multipartFile));
