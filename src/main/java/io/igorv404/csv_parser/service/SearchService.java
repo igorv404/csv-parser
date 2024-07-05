@@ -2,6 +2,7 @@ package io.igorv404.csv_parser.service;
 
 import io.igorv404.csv_parser.model.Movie;
 import io.igorv404.csv_parser.repository.MovieRepository;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,22 +25,23 @@ public class SearchService {
   }
 
   private boolean hasMatch(Movie entity, String query, boolean isNumeric) {
+    List<String> properties = new LinkedList<>(List.of(
+        entity.getName().toLowerCase(),
+        entity.getDescription().toLowerCase(),
+        entity.getDuration().toLowerCase(),
+        entity.getAgeLimit().toLowerCase(),
+        entity.getNumberOfRatings().toLowerCase()
+    ));
     if (isNumeric) {
-      return String.valueOf(entity.getId()).contains(query) ||
-          String.valueOf(entity.getMetascore()).contains(query) ||
-          String.valueOf(entity.getRank()).contains(query) ||
-          String.valueOf(entity.getYear()).contains(query) ||
-          entity.getName().toLowerCase().contains(query) ||
-          entity.getDescription().toLowerCase().contains(query) ||
-          entity.getDuration().toLowerCase().contains(query) ||
-          entity.getAgeLimit().toLowerCase().contains(query) ||
-          entity.getNumberOfRatings().toLowerCase().contains(query);
-    } else {
-      return entity.getName().toLowerCase().contains(query) ||
-          entity.getDescription().toLowerCase().contains(query) ||
-          entity.getDuration().toLowerCase().contains(query) ||
-          entity.getAgeLimit().toLowerCase().contains(query) ||
-          entity.getNumberOfRatings().toLowerCase().contains(query);
+      List<String> numericProperties = List.of(
+          String.valueOf(entity.getId()),
+          String.valueOf(entity.getMetascore()),
+          String.valueOf(entity.getRank()),
+          String.valueOf(entity.getYear())
+      );
+      properties.addAll(numericProperties);
     }
+    return properties.stream()
+        .anyMatch(property -> property.contains(query));
   }
 }
