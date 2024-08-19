@@ -3,7 +3,7 @@ package io.igorv404.csv_parser.util;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 
-public interface ControllerTemplate<T, ID> {
+public interface RestCrudController<T, ID> {
   ResponseEntity<List<T>> getAllEntities();
 
   ResponseEntity<T> getEntity(ID id);

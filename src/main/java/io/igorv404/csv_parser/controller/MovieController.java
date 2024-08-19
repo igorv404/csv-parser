@@ -2,7 +2,7 @@ package io.igorv404.csv_parser.controller;
 
 import io.igorv404.csv_parser.model.Movie;
 import io.igorv404.csv_parser.service.MovieService;
-import io.igorv404.csv_parser.util.ControllerTemplate;
+import io.igorv404.csv_parser.util.RestCrudController;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,14 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/movie")
-public class MovieController implements ControllerTemplate<Movie, Integer> {
+public class MovieController implements RestCrudController<Movie, Integer> {
   private final MovieService movieService;
 
   @Override

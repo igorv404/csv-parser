@@ -2,7 +2,7 @@ package io.igorv404.csv_parser.service;
 
 import io.igorv404.csv_parser.model.Movie;
 import io.igorv404.csv_parser.repository.MovieRepository;
-import io.igorv404.csv_parser.util.ServiceTemplate;
+import io.igorv404.csv_parser.util.RestCrudService;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MovieService implements ServiceTemplate<Movie, Integer> {
+public class MovieService implements RestCrudService<Movie, Integer> {
   private final MovieRepository movieRepository;
 
   @Override
@@ -30,17 +30,8 @@ public class MovieService implements ServiceTemplate<Movie, Integer> {
 
   @Override
   public Movie updateEntity(Movie entity) {
-    Movie updatedEntity = this.getEntity(entity.getId());
-    updatedEntity.setName(entity.getName());
-    updatedEntity.setDescription(entity.getDescription());
-    updatedEntity.setMetascore(entity.getMetascore());
-    updatedEntity.setRank(entity.getRank());
-    updatedEntity.setYear(entity.getYear());
-    updatedEntity.setDuration(entity.getDuration());
-    updatedEntity.setAgeLimit(entity.getAgeLimit());
-    updatedEntity.setRating(entity.getRating());
-    updatedEntity.setNumberOfRatings(entity.getNumberOfRatings());
-    return this.movieRepository.save(updatedEntity);
+    this.getEntity(entity.getId());
+    return this.movieRepository.save(entity);
   }
 
   @Override
